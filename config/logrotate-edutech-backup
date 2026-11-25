@@ -1,0 +1,8 @@
+ /home/gladis/backups/audit.log {
+su root root
+weekly
+rotate 8
+compress
+missingok
+notifempty
+}
