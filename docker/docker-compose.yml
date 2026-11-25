@@ -1,0 +1,35 @@
+services:
+  proxy:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    networks:
+      - frontend
+  portail:
+    image: nginx:alpine
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+    networks:
+      - frontend
+  api:
+    image: traefik/whoami
+    networks:
+      - frontend
+      - backend
+  db:
+    image: mysql:latest
+    env_file: /home/gladis/mysql.env
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - backend
+networks:
+  frontend:
+  backend:
+    internal: true
+volumes:
+  dbdata:
